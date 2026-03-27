@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
   tbc_categorias.hasMany(models.tbb_productos,
     {
       as: 'tbb_productos',
-      foreignKey: 'id_categorias',
+      foreignKey: 'id_categoria',
     }
   );
 

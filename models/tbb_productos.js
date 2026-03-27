@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
     stock: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    id_categoria: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
   }, {
     sequelize,
@@ -34,9 +38,14 @@ module.exports = (sequelize, DataTypes) => {
     tbb_productos.belongsTo(models.tbc_categorias,
     {
       as: 'tbc_categorias',
-      foreignKey: 'id_categorias',
+      foreignKey: 'id_categoria',
     }
   );
+
+    tbb_productos.hasMany(models.tbd_carrito_detalle, {
+      as: 'detalles_carrito',
+      foreignKey: 'id_producto',
+    });
 
   };
   return tbb_productos;
