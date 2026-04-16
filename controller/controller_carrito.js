@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const carrito = require('../models').tbb_carritos;
 
 module.exports = {
@@ -10,7 +9,7 @@ module.exports = {
             fecha_creacion: req.body.fecha_creacion || new Date(),
             id_usuario: req.body.id_usuario,
         })
-        .then(carritoItem => res.status(200).send(carritoItem))
+        .then(carritoItem => res.status(201).send(carritoItem))
         .catch(error => res.status(400).send(error));
     },
     list(_, res){
@@ -18,21 +17,21 @@ module.exports = {
         .then(carritos => res.status(200).send(carritos))
         .catch(error => res.status(400).send(error));
     },
-    find(req, res){
+    findById(req, res){
         const id = req.params.id;
 
-        if (id) {
-            return carrito.findByPk(id)
-            .then(carritoItem => {
-                if (!carritoItem) {
-                    return res.status(404).send({message: 'Carrito no encontrado'});
-                }
-                return res.status(200).send(carritoItem);
-            })
-            .catch(error => res.status(400).send(error));
+        if (!id) {
+            return res.status(400).send({message: 'Debe proporcionar id para buscar'});
         }
 
-        return res.status(400).send({message: 'Debe proporcionar id para buscar'});
+        return carrito.findByPk(id)
+        .then(carritoItem => {
+            if (!carritoItem) {
+                return res.status(404).send({message: 'Carrito no encontrado'});
+            }
+            return res.status(200).send(carritoItem);
+        })
+        .catch(error => res.status(400).send(error));
     },
     update(req, res){
         const id = req.params.id;

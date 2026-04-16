@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const producto = require('../models').tbb_productos;
 
 module.exports = {
@@ -11,7 +10,7 @@ module.exports = {
             stock: req.body.stock,
             id_categoria: req.body.id_categoria,
         })
-        .then(productoItem => res.status(200).send(productoItem))
+        .then(productoItem => res.status(201).send(productoItem))
         .catch(error => res.status(400).send(error));
     },
     list(_, res){
@@ -19,30 +18,34 @@ module.exports = {
         .then(productos => res.status(200).send(productos))
         .catch(error => res.status(400).send(error));
     },
-    find(req, res){
+    findById(req, res){
         const id = req.params.id;
-        const nombre = req.params.nombre || req.query.nombre;
 
-        if (id) {
-            return producto.findByPk(id)
-            .then(productoItem => {
-                if (!productoItem) {
-                    return res.status(404).send({message: 'Producto no encontrado'});
-                }
-                return res.status(200).send(productoItem);
-            })
-            .catch(error => res.status(400).send(error));
+        if (!id) {
+            return res.status(400).send({message: 'Debe proporcionar id para buscar'});
         }
 
-        if (nombre) {
-            return producto.findAll({
-                where: { nombre }
-            })
-            .then(productos => res.status(200).send(productos))
-            .catch(error => res.status(400).send(error));
+        return producto.findByPk(id)
+        .then(productoItem => {
+            if (!productoItem) {
+                return res.status(404).send({message: 'Producto no encontrado'});
+            }
+            return res.status(200).send(productoItem);
+        })
+        .catch(error => res.status(400).send(error));
+    },
+    findByName(req, res){
+        const nombre = req.params.nombre;
+
+        if (!nombre) {
+            return res.status(400).send({message: 'Debe proporcionar nombre para buscar'});
         }
 
-        return res.status(400).send({message: 'Debe proporcionar id o nombre para buscar'});
+        return producto.findAll({
+            where: { nombre }
+        })
+        .then(productos => res.status(200).send(productos))
+        .catch(error => res.status(400).send(error));
     },
     update(req, res){
         const id = req.params.id;

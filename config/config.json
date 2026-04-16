@@ -1,26 +1,24 @@
 {
   "development": {
     "username": "root",
-    "password": "1234",
+    "password": "joscanela4#",
     "database": "db_tiendavirtual",
     "host": "localhost",
-    "port": "3307",
+    "port": 3306,
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": "1234",
-    "database": "db_tiendavirtual",
-    "host": "localhost",
-    "port": "3306",
+    "password": "joscanela4#",
+    "database": "database_test",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
-    "password": "1234",
-    "database": "db_tiendavirtual",
-    "host": "localhost",
-    "port": "3306",
+    "password": "joscanela4#",
+    "database": "database_production",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   }
 }

@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const carritoDetalle = require('../models').tbd_carrito_detalle;
 
 module.exports = {
@@ -10,7 +9,7 @@ module.exports = {
             id_carrito: req.body.id_carrito,
             id_producto: req.body.id_producto,
         })
-        .then(detalle => res.status(200).send(detalle))
+        .then(detalle => res.status(201).send(detalle))
         .catch(error => res.status(400).send(error));
     },
     list(_, res){
@@ -18,21 +17,21 @@ module.exports = {
         .then(detalles => res.status(200).send(detalles))
         .catch(error => res.status(400).send(error));
     },
-    find(req, res){
+    findById(req, res){
         const id = req.params.id;
 
-        if (id) {
-            return carritoDetalle.findByPk(id)
-            .then(detalle => {
-                if (!detalle) {
-                    return res.status(404).send({message: 'Detalle de carrito no encontrado'});
-                }
-                return res.status(200).send(detalle);
-            })
-            .catch(error => res.status(400).send(error));
+        if (!id) {
+            return res.status(400).send({message: 'Debe proporcionar id para buscar'});
         }
 
-        return res.status(400).send({message: 'Debe proporcionar id para buscar'});
+        return carritoDetalle.findByPk(id)
+        .then(detalle => {
+            if (!detalle) {
+                return res.status(404).send({message: 'Detalle de carrito no encontrado'});
+            }
+            return res.status(200).send(detalle);
+        })
+        .catch(error => res.status(400).send(error));
     },
     update(req, res){
         const id = req.params.id;
