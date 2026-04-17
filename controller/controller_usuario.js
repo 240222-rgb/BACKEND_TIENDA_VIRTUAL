@@ -2,15 +2,30 @@ const usuario = require('../models').tbc_usuarios;
 
 module.exports = {
     create(req, res){
+        const { nombre, direccion, telefono, email, password, rol, fecha_registro } = req.body;
+        const allowedRoles = ['admin', 'cliente'];
+
+        if (!nombre || !direccion || !telefono || !email || !password) {
+            return res.status(400).send({
+                message: 'Debe enviar nombre, direccion, telefono, email y password'
+            });
+        }
+
+        if (rol && !allowedRoles.includes(rol)) {
+            return res.status(400).send({
+                message: 'Rol inválido. Debe ser "admin" o "cliente"'
+            });
+        }
+
         return usuario
         .create({
-            nombre: req.body.nombre,
-            direccion: req.body.direccion,
-            telefono: req.body.telefono,
-            email: req.body.email,
-            password: req.body.password,
-            rol: req.body.rol,
-            fecha_registro: req.body.fecha_registro || new Date(),
+            nombre,
+            direccion,
+            telefono,
+            email,
+            password,
+            rol: rol || 'cliente',
+            fecha_registro: fecha_registro ? new Date(fecha_registro) : new Date(),
         })
         .then(usuarioItem => res.status(201).send(usuarioItem))
         .catch(error => res.status(400).send(error));
